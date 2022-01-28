@@ -21,6 +21,12 @@ Both the server and the client have access to the root certificate for the CA, i
 TLS certificates have been signed by a trusted authority.
 
 ## Usage
+First you need to generate a root certificate for CFSSL to use, it needs this in order to act as a certificate authority. Do this like so:
+
+```shell
+make ca
+```
+
 Server, client and CA can be started using [docker-compose](https://docs.docker.com/compose/):
 
 ```shell

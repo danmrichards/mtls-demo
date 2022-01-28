@@ -62,3 +62,7 @@ bin
 
 # MacOS
 .DS_Store
+
+# Certs
+cert/ca.key
+cert/ca.crt
