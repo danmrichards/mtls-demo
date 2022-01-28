@@ -1,0 +1,32 @@
+services:
+  cfssl:
+    image: cfssl/cfssl
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./cert:/cert
+    command: serve -address=0.0.0.0 -port=8888 -ca-key=/cert/ca.key -ca=/cert/ca.crt
+  server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    command:
+      - -ca=cfssl:8888
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./cert/ca.crt:/cert/ca.crt
+    depends_on:
+      - cfssl
+  client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    command:
+      - -ca=cfssl:8888
+      - -server=server:5000
+    volumes:
+      - ./cert/ca.crt:/cert/ca.crt
+    depends_on:
+      - cfssl
+      - server

@@ -1,0 +1,16 @@
+# Build image.
+FROM golang:1.17 as build
+
+WORKDIR /go/src/mtls-demo
+
+COPY .. .
+RUN make linux-server
+
+# Run image.
+FROM gcr.io/distroless/base-debian11
+
+COPY --from=build /go/src/mtls-demo/bin/server-linux-amd64 /server
+
+EXPOSE 5000/tcp
+
+ENTRYPOINT ["/server"]
